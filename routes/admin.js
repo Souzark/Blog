@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-// Exemplo de rota dentro do admin
+// Defina suas rotas de admin aqui
 router.get('/', (req, res) => {
-  res.send('Página de administração');
+    res.render('admin/index');
 });
 
-router.get('/posts', (req, res) => {
-  res.send('Lista de posts');
-});
-
-module.exports = router; // Exportando o roteador corretamente
+module.exports = router;

@@ -3,12 +3,14 @@ const { engine } = require('express-handlebars');
 const mongoose = require('mongoose');
 const app = express();
 const admin = require('./routes/admin'); // Importando as rotas de admin
+const path = require('path');
 
 // Configurações
-    //express    
+// Express    
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-    //handlebars
+
+// Handlebars
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
@@ -22,11 +24,11 @@ mongoose
     console.error('Erro ao conectar ao MongoDB:', err);
   });
 
+// Public
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Rotas
 app.use('/admin', admin); // Certifique-se de que o admin exporta um Router
-app.get('/', (req, res) => {
-  res.render('index');
-});
 
 // Servidor
 const PORT = 8081;
