@@ -1,22 +1,25 @@
-const express = require('express');
-const { engine } = require('express-handlebars');
-const mongoose = require('mongoose');
+import express from 'express';
+import { engine } from 'express-handlebars';
+import mongoose from 'mongoose';
+import adminRoutes from './routes/admin.js';  // Importação correta
+import path from 'path';
+
 const app = express();
-const admin = require('./routes/admin'); // Importando as rotas de admin
-const path = require('path');
 
 // Configurações
-// Express    
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Handlebars
-app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.engine('handlebars', engine({
+  defaultLayout: 'main',
+  partialsDir: path.join(path.resolve(), 'views/partials')
+}));
 app.set('view engine', 'handlebars');
 
 // Conexão com o MongoDB
 mongoose
-  .connect('mongodb://127.0.0.1:27017/aprendendo')
+  .connect('mongodb://127.0.0.1:27017/blogDB')
   .then(() => {
     console.log('Conectado ao MongoDB com sucesso');
   })
@@ -25,10 +28,10 @@ mongoose
   });
 
 // Public
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(path.resolve(), 'public')));
 
 // Rotas
-app.use('/admin', admin); // Certifique-se de que o admin exporta um Router
+app.use('/admin', adminRoutes); // Usando a variável correta para rotas
 
 // Servidor
 const PORT = 8081;
